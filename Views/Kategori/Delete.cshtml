@@ -1,0 +1,21 @@
+@model Kategori
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body text-center">
+                <p>
+                    @Model.KategoriAdi silmek istiyor musnuz
+                </p>
+                <form asp-action="Deleteconfirm" asp-controller="Kategori" method="post">
+                    <input type="hidden" name="id" value="@Model.Id">
+                    <button type="submit" class="btn btn-danger">Sil</button>
+                    <a asp-controller="Kategori" asp-action="Index" class="btn btn-success">İptal</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>  

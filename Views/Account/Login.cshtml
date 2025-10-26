@@ -1,0 +1,60 @@
+@model AccountLoginModel
+@section Bar {
+    <section class="bg-primary p-3">
+        <div class="container">
+            <nav >
+                <ol class="breadcrumb mb-0 bg-primary">
+                    <li class="breadcrumb-item">
+                        <a href="#">Anasayfa</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        Kullanıcı Login
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+}
+<section class="mt-3">
+    <div class="container">
+        <div class="row justify-content-center my-3 ">
+            <div class="col-7">
+                <div class="card car-body">
+                    <form method="post" novalidate>
+                        <div asp-validation-summary=All class="text-danger"></div>
+                        
+
+                        <div class="m-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+
+                        </div>
+
+                        <div class="m-3">
+                            <label asp-for="Password" class="form-label"></label>
+                            <input asp-for="Password" class="form-control">
+                            <span asp-validation-for="Password" class="text-danger"></span>
+
+                        </div>
+
+                        <div class="m-3 form-check">
+                            <label asp-for="BeniHatırla" class="form-check-label"></label>
+                            <input asp-for="BeniHatırla" class="form-check-input">
+                            <span asp-validation-for="BeniHatırla" class="text-danger"></span>
+
+                        </div>
+
+                        <button type="submit" class="btn btn-primary m-3">Kaydet</button>
+                        <a asp-action="ForgotPassword" class="btn btn-warning">Şifremi unttum</a>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+

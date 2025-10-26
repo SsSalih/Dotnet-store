@@ -1,0 +1,165 @@
+@model Order
+
+@section Bar {
+    <section class="bg-primary p-3">
+        <div class="container">
+            <nav>
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item">
+                        <a href="#">Anasayfa</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        Siparişler
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+}
+
+@{
+    Layout = "~/Views/Shared/_SiteLayout.cshtml";
+}
+
+ <main class="container my-3">
+
+        <div class="row">
+            @await Html.PartialAsync("Partials/Site/_AccountSideBar")
+
+            <div class="col-9">
+                 <div class="card shadow"></div>
+                <div class="card-header py-1 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title">Sipariş No:#5 </h5>
+                    <span class="badge bg-success p-2">Teslim Edildi</span>
+                </div>
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped mb-2">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th style="width: 40px;">Order Id</th>
+                                    <th style="width: 80px;">Resim</th>
+                                    <th>Ürün Adı</th>
+                                    <th>Fiyat</th>
+                                    <th>Adet</th>
+                                    <th>Toplam</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null) @* Modelin null olmadığını kontrol et *@
+                                {
+                                    <h3>Sipariş Detayları: @Model.OrderId</h3>
+                                    <p>Müşteri: @Model.AdSoyad</p>
+                                    @* Diğer sipariş başlık bilgileri *@
+
+                                    @if (Model.OrderItem != null && Model.OrderItem.Any()) @* OrderItem listesinin null veya boş olmadığını kontrol et *@
+                                    {
+                                        
+                                            <thead>
+                                                <tr>
+                                                    <th>Kalem ID</th>
+                                                    <th>Resim</th>
+                                                    <th>Ürün Adı</th>
+                                                    <th>Miktar</th>
+                                                    <th>Birim Fiyat</th>
+                                                    <th>Toplam Fiyat</th>
+                                                </tr>
+                                            </thead>
+                                            
+                                                @foreach (var item in Model.OrderItem)
+                                                {
+                                                    if (item != null) @* Listenin içindeki bir item'ın null olmadığını kontrol et *@
+                                                    {
+                                                        <tr class="align-middle">
+                                                            <td>@item.OrderItemId</td>
+                                                            <td>
+                                                                @if (item.Urun != null && !string.IsNullOrEmpty(item.Urun.Resim)) @* Urun ve Resim null/boş değilse *@
+                                                                {
+                                                                    <img src="@Url.Content("~/img/" + item.Urun.Resim)" class="img-fluid"
+                                                                        style="max-width: 100px;" alt="@(item.Urun.UrunAdi ?? "Ürün")">
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>Resim Yok</span>
+                                                                }
+                                                            </td>
+                                                            <td>@(item.Urun?.UrunAdi ?? "N/A")</td> @* Urun veya UrunAdi null ise "N/A" yaz *@
+                                                            <td>@item.Miktar</td>
+                                                            <td>@item.Fiyat.ToString("C")</td> @* Para birimi formatında göster *@
+                                                            <td>@((item.Miktar * item.Fiyat).ToString("C"))</td> @* Toplamı hesapla ve para birimi formatında göster *@
+                                                        </tr>
+                                                    }
+                                                }
+                                        
+                                        
+                                        <h4>Genel Toplam: @Model.ToplamFiyat.ToString("C")</h4>
+                                    }
+                                    else
+                                    {
+                                        <p>Bu siparişe ait ürün bulunmamaktadır.</p>
+                                    }
+                                }
+                                else
+                                {
+                                    <p>Sipariş detayları yüklenemedi veya böyle bir sipariş bulunamadı.</p>
+                                }
+
+                                <tr class=" align-middle fw-bold ">
+                                    <td colspan="4"></td>
+                                    <td>Ara Toplam:</td>
+                                    <td>@Model.AraToplam() ₺</td>
+                                </tr>
+                                <tr class=" align-middle fw-bold ">
+                                    <td colspan="4"></td>
+                                    <td>Vergi:</td>
+                                    <td>@(Model.Toplam()- Model.AraToplam())₺ (%20)</td>
+                                </tr>
+                                <tr class="align-middle fw-bold ">
+                                    <td colspan="4"></td>
+                                    <td>Kargo:</td>
+                                    <td>Ücretsiz</td>
+                                </tr>
+                                <tr class=" align-middle fw-bold ">
+                                    <td colspan="4"></td>
+                                    <td>Toplam:</td>
+                                    <td>@Model.Toplam()₺</td>
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+
+                        <table class="table table-bordered mb-0">
+                            <tr>
+                                <td style="width: 150px;">Teslim Tarihi</td>
+                                <td>@Model.SiparişTarihi</td>
+
+                            </tr>
+                            <tr>
+                                <td style="width: 150px;">Ad Soyad</td>
+                                <td>@Model.AdSoyad</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 150px;">Teslimat Adresi</td>
+                                <td>@Model.AdresSatiri / @Model.Sehir / @Model.PostaKodu / @Model.Telefon</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 150px;">Fatura Adresi</td>
+                                <td>@Model.AdresSatiri</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 150px;">Ödeme Bilgileri</td>
+                                <td>1234-5415-2255-**** (garnti bankası 4 taksit)</td>
+                            </tr>
+
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            </div>
+        </div>
+
+    </main>

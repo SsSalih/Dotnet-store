@@ -1,0 +1,95 @@
+@model List<Order>
+
+@section Bar {
+    <section class="bg-primary p-3">
+        <div class="container">
+            <nav>
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item">
+                        <a href="#">Anasayfa</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        Siparişler
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+}
+
+@{
+    Layout = "~/Views/Shared/_SiteLayout.cshtml";
+}
+
+<section class="mt-3">
+    <div class="container">
+        <div class="row">
+
+            @await Html.PartialAsync("Partials/Site/_AccountSideBar")
+
+            <div class="col-9">
+                <div class="card-shadow">
+                    <div class="card-header py-1">
+                        <h5 class="card-title mb-0">Siparişler</h5>
+                    </div>
+                    <div class="card-body">
+                        @if(@Model.Count == 0)
+                        {
+                            <div class="alert alert-danger mt-3">Siparişiniz Yok</div>
+                        }
+                        <div class="accordion " id="orders">
+                            @foreach (var item in Model)
+                            {
+                                <div class="accordion-item ">
+                                    <h2 class="accordion-header" id="heading_@item.OrderId">
+                                        <button class="accordion-button collapsed " type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#order_@item.OrderId" aria-expanded="false"
+                                            aria-controls="order_@item.OrderId">
+                                            Sipariş no: #@item.OrderId
+                                        </button>
+                                    </h2>
+                                    <div id="order_@item.OrderId" class="accordion-collapse show "
+                                        aria-labelledby="heading_@item.OrderId" data-bs-parent="#orders">
+                                        <div class="accordion-body ">
+                                            <table class="table table-bordered mb-0">
+                                                <tr>
+                                                    <td colspan="2">Teslim Tarihi</td>
+                                                    <td colspan="3">@item.SiparişTarihi</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">Ad Soyad</td>
+                                                    <td colspan="3">@item.AdSoyad</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">Teslimat Adresi</td>
+                                                    <td colspan="3">
+                                                        @item.AdresSatiri / @item.Sehir / @item.PostaKodu / @item.Telefon
+                                                    </td>
+                                                </tr>
+                                                @foreach (var items in item.OrderItem)
+                                                {
+                                                    <tr>
+                                                        <td style="width: 80px">
+                                                            <img src="~/img/@items.Urun.Resim" class="img-fluid" />
+                                                        </td>
+                                                        <td>@items.Urun.UrunAdi</td>
+                                                        <td>@items.Urun.Fiyat ₺</td>
+                                                        <td>@items.Miktar <span>adet</span></td>
+                                                        <td>@(items.Fiyat* items.Miktar) ₺</td>
+                                                    </tr>
+                                                }
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>

@@ -1,0 +1,24 @@
+@using dotnet_store.Controllers
+@model Urun
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body text-center">
+                <p>
+                    @Model.UrunAdi silmek istiyor musnuz
+                </p>
+                <form asp-action="Confirmdelete" asp-controller="AdminUrun" method="post">
+                    <input type="hidden" name="id" value="@Model.Id">
+                    <button type="submit" class="btn btn-danger">Sil</button>
+                    <a asp-controller="AdminUrun" asp-action="Index" class="btn btn-success">İptal</a>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</div>  
